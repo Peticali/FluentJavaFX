@@ -10,6 +10,7 @@ import com.sun.jna.Structure;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinNT.HRESULT;
 import com.sun.jna.NativeLibrary;
+	
 
 	public class BlurTest {
 		public interface Accent {
@@ -17,7 +18,7 @@ import com.sun.jna.NativeLibrary;
 			public static final int ACCENT_ENABLE_GRADIENT = 1;
 			public static final int ACCENT_ENABLE_TRANSPARENTGRADIENT = 2;
 			public static final int ACCENT_ENABLE_BLURBEHIND = 3;
-			public static final int ACCENT_ENABLE_ACRYLIC = 4; // YES, available on build 17063
+			public static final int ACCENT_ENABLE_ACRYLIC = 4; 
 			public static final int ACCENT_INVALID_STATE = 5;
 		}
 	
@@ -50,16 +51,14 @@ import com.sun.jna.NativeLibrary;
 		}
 	
 
-		public void BlurThis(HWND hwnd) {
-			
-			HWND aeroFrameHWND = hwnd; // Modify pointer to window
-	
+		public void BlurThis(HWND aeroFrameHWND) {
 			NativeLibrary user32 = NativeLibrary.getInstance("user32");
 	
 			AccentPolicy accent = new AccentPolicy();
-			accent.AccentState = Accent.ACCENT_ENABLE_BLURBEHIND;
-			accent.GradientColor = 0xFF000000;
-			
+			accent.AccentState = Accent.ACCENT_ENABLE_ACRYLIC;
+			//32 = noise opacity
+			//BGR 12, 12, 12
+			accent.GradientColor = 0x32121212;
 			accent.write();
 	
 			WindowCompositionAttributeData data = new WindowCompositionAttributeData();
