@@ -2,46 +2,32 @@ package application;
 	
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.stream.IntStream;
-
-import com.peticali.scripts.Scripts;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
-
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 public class Main extends Application{
 	
-	private TextField t;
+	public static TextField t;
+	public static Scene scene;
 	
-	private void InsertIntoCalc(String ch){
+	private void CreateBttons(Scene s) {
 		
-		
-		
-	}
-	
-	private void CreateBttons(Scene scene) {
-		
+		scene = s;
 		
 		FlowPane pane = (FlowPane) scene.lookup("#numbersPane");
 		  
@@ -76,11 +62,8 @@ public class Main extends Application{
 			pane.getChildren().add(button);
 		}
 	
-		
 	}
 	
-	
-  
 	private double xOffset = 0;
 	private double yOffset = 0;
 	
@@ -89,41 +72,34 @@ public class Main extends Application{
 		
 		try{
 			
-			
+			//loading the fxml
 			FXMLLoader loader1 = new FXMLLoader();
 	        loader1.setLocation(getClass().getResource("Teste.fxml"));
-	       
-	        
 	        AnchorPane rootLayout = loader1.load();
 	        Scene scene = new Scene(rootLayout);
-	       
+	        t = (TextField) scene.lookup("#calc");
+	        		
+	        //defining window styles
 	        stage.initStyle(StageStyle.UNDECORATED);
-	        
-	        
 	        JMetro jMetro = new JMetro(Style.DARK);
 	        jMetro.setScene(scene);
-	        
-	        
 	        stage.setTitle("Calculator");
 	        stage.setScene(scene);
 	        stage.show();
 	        
 	        CreateBttons(scene);
+	        
+	        //getting te hwnd
 	        stage.setAlwaysOnTop(true);
 	        HWND hwnd = User32.INSTANCE.GetActiveWindow();
 	        stage.setAlwaysOnTop(false);
 	        
-	       
+	        //init blur
 	        BlurTest blurTest = new BlurTest();
 			blurTest.BlurThis(hwnd);
 			
-		
-			
-			Scripts.SaveScene(scene);
+			//script for dragregion (top retangle)
 			Rectangle DragRegion = (Rectangle) scene.lookup("#DragRegion");
-			
-			t = (TextField) scene.lookup("#calc"); 
-			
 			DragRegion.setOnMousePressed(new EventHandler<MouseEvent>() {
 			     @Override
 			     public void handle(MouseEvent event) {
